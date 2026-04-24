@@ -1,8 +1,8 @@
 /* =====================================================
-   AUTH — MULTI-USUARIO (credenciales en GLOBAL_DB)
+   AUTH — BYPASS (sin Firebase)
 ===================================================== */
-const DEFAULT_USER   = 'admin';
-const DEFAULT_PASS   = '1234';
+const DEFAULT_USER   = 'test';
+const DEFAULT_PASS   = 'test123';
 const DEFAULT_MASTER = 'master1234';
 
 // Lee un usuario de la DB global
