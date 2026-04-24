@@ -2,32 +2,25 @@
    INIT
 ===================================================== */
 async function init() {
-  // Bloquear pull-to-refresh del navegador en PWA
-  let startY = 0;
-  document.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
-  document.addEventListener('touchmove', e => {
-    const dy = e.touches[0].pageY - startY;
-    if (dy > 0 && window.scrollY === 0) e.preventDefault();
-  }, { passive: false });
+  try {
+    // Bloquear pull-to-refresh del navegador en PWA
+    let startY = 0;
+    document.addEventListener('touchstart', e => { startY = e.touches[0].pageY; }, { passive: true });
+    document.addEventListener('touchmove', e => {
+      const dy = e.touches[0].pageY - startY;
+      if (dy > 0 && window.scrollY === 0) e.preventDefault();
+    }, { passive: false });
 
-  _initFirebase();
-  instalarPWA();
-  await initGlobalDB();
-  updateHdrDate();
-  initNotificaciones();
-  iniciarWatchdogInactividad();
+    // Inicializar aplicación
+    await initDB('default');
+    initNotificaciones();
+    updateHdrDate();
 
-  // Sincronizar al volver a la pestaña/app (cambio de dispositivo)
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden && appDesbloqueada && _fbUser) {
-      drivePullAndMerge().then(() => {
-        if (drivePendingSync) driveSave();
-      });
-    }
-  });
-
-  // Mostrar botón huella si hay credencial registrada
-  actualizarBotonHuella();
+    console.log('✅ Aplicación inicializada');
+  } catch (err) {
+    console.error('Error en init:', err);
+  }
+}
 
   // Indicadores de conexión
   window.addEventListener('online',  () => driveSetStatus('ok', 'Conexión restaurada'));
